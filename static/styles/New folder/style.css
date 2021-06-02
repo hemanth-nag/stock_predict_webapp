@@ -1,0 +1,113 @@
+body {
+  font-size: 16px;
+  color: #fff;
+  background-color: #61122f;
+  font-family: 'Dancing Script', cursive;
+}
+
+#header-nav{
+	background-color: /*#f6b319*/ #fff;
+	margin-right: -10px;
+	border-radius: 0;
+	border: 0;
+}
+
+#logo-img{
+	background: url('../images/restaurant-logo_large.png') no-repeat;
+	width: 150px;
+	height: 150px;
+	margin: 10px 15px 10px 0;
+}
+
+.navbar-brand{
+	padding-top: 25px;
+}
+
+.navbar-brand h1{
+	/*font-family: 'Lora', serif;*/
+	color: #000080;
+	font-size: 1.75em;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #222;
+	margin-top: 0;
+	margin-bottom: 0;
+	line-height: 1.36;
+
+}
+.navbar-brand p{
+	color: #000;
+	/*text-transform: uppercase;*/
+	font-size: 1em;
+	margin-top: 2px;
+}
+.navbar-brand p span{
+	vertical-align: middle;
+}
+.navbar-header button.navbar-toggle{
+	clear: both;
+	margin-top: -20px; 
+}
+.container2 {
+	width: 300px;
+	height: 1px;
+	background: #123;
+	color: #fff;
+	margin-top: 0px;
+	top: 40%;
+	left: 45%;
+	position:absolute;
+	transform: translate(-30%, -55%);
+	box-sizing: border-box;
+}
+
+.container2 p  {
+	margin:100;
+	margin-top: 10px;
+	padding: 0;
+	color: #000;
+	font-weight: bold;
+}
+.container2 input[type='text']
+{
+	width: 150%;
+	top: 50%;
+	color: #000;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+.container2 input[type='submit']
+{
+	width: 170%;
+	top: 50%;
+	color: #000;
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 18px;
+}
+.container2 input[type="submit"]:hover
+{
+	cursor: pointer;
+	text-align: center;
+	background: blue;
+	color: black;
+}
+.container2 p input[type="submit"]
+{
+	border:none;
+	outline: none;
+	text-align: center;
+	height: 40px;
+	padding-left: 100;
+	background: red;
+	color: #000;
+	font-size: 18px;
+	border-radius: 20px;
+}
+.container2 p input[type="submit"]:hover
+{
+	cursor: pointer;
+	text-align: center;
+	background: #ffc107;
+	color: black;
+}
