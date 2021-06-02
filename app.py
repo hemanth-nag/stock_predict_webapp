@@ -8,11 +8,14 @@ from dateutil.relativedelta import relativedelta # tool for manipulating dates a
 import numpy as np # tool for handling vectors, matrices or large multidimensional arrays
 from sklearn.model_selection import train_test_split # tool for machine learning
 from sklearn.ensemble import RandomForestRegressor
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, session
 from plotly.offline import plot
+from flask_session import Session
 
 app = Flask(__name__)
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+SESSION_TYPE='filesystem'
+app.config.from_object(__name__)
+Session(app)
 
 global stock, duration, compare
 
@@ -36,12 +39,13 @@ def index():
 def set_stock():
         global stock
         form_data= request.form
-        stock=form_data['Name']
+        #stock=form_data['Name']
+        session['stock']=form_data['Name']
         try:
-            data.DataReader(stock, 'yahoo', '2019-01-01', '2019-01-02')
+            data.DataReader(session.get('stock'), 'yahoo', '2019-01-01', '2019-01-02')
         except(KeyError, OSError):
             return render_template('page1.html', var= 'Not a valid stock symbol, try again:') 
-        return render_template('page3.html', stock=stock)
+        return render_template('page3.html', stock=session.get('stock'))#stock)
 
     
         
@@ -49,15 +53,16 @@ def set_stock():
 def set_compare():
         global compare
         form_data= request.form
-        compare=form_data['Name']
+        session['compare']=form_data['Name']
         try:
-            data.DataReader(compare, 'yahoo', '2019-01-01', '2019-01-02')
+            data.DataReader(session.get('compare'), 'yahoo', '2019-01-01', '2019-01-02')
         except(KeyError, OSError):
             return render_template('page6.html', var= 'Not a valid stock symbol, try again:')
         optB()        
         return render_template('fig2.html')       
 
 def optC():
+    stock=session.get('stock')
     try:
         # Save the data in "stockvariable"
         stockvariable = yf.Ticker(stock)
@@ -103,6 +108,8 @@ def optC():
         return False
 
 def optB():
+    stock=session.get('stock')
+    compare=session.get('compare')
     sdate = '2010-01-01'
     edate = date.today().strftime('%Y-%m-%d')
     df = data.DataReader(stock, 'yahoo', sdate, edate)
@@ -136,6 +143,7 @@ def optB():
 
 
 def optE():
+    stock=session.get('stock')
     # Save the date of today in the variable "today"
     try:
         today = date.today()
@@ -199,6 +207,7 @@ def optE():
 
         
 def optD():
+    stock=session.get('stock')
     try:
         stockvariable = yf.Ticker(stock)
         # Save the cashflows in "cashflow"
@@ -280,6 +289,7 @@ def optD():
 
         
 def optF():
+    stock=session.get('stock')
     # Get the date of today
     today = date.today()
     # Change the format
@@ -292,7 +302,7 @@ def optF():
 
     # Creating a variable "n" for predicting the amount of days in the future
     # We predict the stock price 30 days in the future
-    n = duration
+    n = session.get('duration')
 
     # Create another column "Prediction" shifted "n" units up
     df['Prediction'] = df[['Adj Close']].shift(-n)
@@ -348,7 +358,7 @@ def optF():
     d = d + relativedelta(days =+ 1)
 
     # Now we make a list with the respective daterange, beginning from the startdate of our predictions and ending 30 days after
-    datelist = pd.date_range(d, periods = duration).tolist()
+    datelist = pd.date_range(d, periods = n).tolist()
     # We add the variable to our Dataframe "predictions"
     predictions['Date'] = datelist
     # Now we have a Dataframe with our predicted values and the correspondig dates
@@ -380,7 +390,7 @@ def optF():
                     line=dict(color='red', dash = 'dot'),
                     opacity=0.9))
 
-    fig.update_layout(title=f'Stock Forecast of {stock} Stock for the next {duration} days',
+    fig.update_layout(title=f'Stock Forecast of {stock} Stock for the next {n} days',
                                 yaxis_title='Adjusted Closing Price in USD',
                                 xaxis_tickfont_size=14,
                                 yaxis_tickfont_size=14)
@@ -390,6 +400,7 @@ def optF():
 
 
 def optA():
+    stock=session.get('stock')
     # Now the user can enter his prefered daterange (sdate = startdate; edate = enddate)
     sdate = '2010-01-01'
     edate = date.today().strftime('%Y-%m-%d')
@@ -424,6 +435,7 @@ def optA():
     
 @app.route('/home_page',methods=['POST','GET'])
 def home_page():
+    stock=session.get('stock')
     global duration
     if request.method == 'POST':
     
@@ -467,15 +479,18 @@ def home_page():
             return render_template('page6.html', var='Please enter the symbol of the stock to compare')
             
         if request.form.get('m1') == ' 1 Month':
-            duration=30
+            session['duration']=30
+            duration=session.get('duration')
             optF()
             return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m12') == ' 1 Year':
-            duration=365
+            session['duration']=365
+            duration=session.get('duration')
             optF()
             return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m6') == ' 6 Months':
-            duration=180
+            session['duration']=180
+            duration=session.get('duration')
             optF()
             return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
             
