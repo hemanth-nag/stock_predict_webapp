@@ -12,7 +12,7 @@ from flask import Flask, render_template, Response, request
 from plotly.offline import plot
 
 app = Flask(__name__)
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 global stock, duration, compare
 
