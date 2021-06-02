@@ -80,7 +80,7 @@ def optC():
         bargroupgap=0.1)
 
         #fig.write_image("./static/images/fig2.png")
-        plotly.offline.plot(fig, filename='./templates/fig.html')
+        plotly.offline.plot(fig, filename='./templates/fig3.html')
         return True
         
         
@@ -141,7 +141,7 @@ def optE():
             fig.update_layout(title_text=f'Analyst Recommendations of {stock} Stock from {six_months} to {today}')
 
             #fig.write_image("./static/images/fig2.png")
-            plotly.offline.plot(fig, filename='./templates/fig.html')
+            plotly.offline.plot(fig, filename='./templates/fig5.html')
             return True  
         
 
@@ -224,7 +224,7 @@ def optD():
                                     tickfont_size = 12))
                           
         #fig.write_image("./static/images/fig2.png")
-        plotly.offline.plot(fig, filename='./templates/fig.html')
+        plotly.offline.plot(fig, filename='./templates/fig4.html')
         return True
         
         
@@ -340,7 +340,7 @@ def optF():
                                 yaxis_tickfont_size=14)
     
     #fig.write_image("./static/images/fig1.png")
-    plotly.offline.plot(fig, filename='./templates/fig.html')
+    plotly.offline.plot(fig, filename='./templates/fig6.html')
 
 
 def optA():
@@ -374,7 +374,7 @@ def optA():
                      
     #fig.write_image("./static/images/fig.png")
     #plot(fig,filename='./static/images/fig.png' , image = 'png')
-    plotly.offline.plot(fig, filename='./templates/fig.html')
+    plotly.offline.plot(fig, filename='./templates/fig1.html')
     
 @app.route('/home_page',methods=['POST','GET'])
 def home_page():
@@ -383,40 +383,46 @@ def home_page():
     
         if request.form.get('stock_table') == 'Click to view top stocks and symbol':
             return render_template('page2.html')
+            
         if request.form.get('back') == 'Back to main page':
             return render_template('page1.html', var= 'Please enter stock symbol:') 
+            
         if request.form.get('A') == 'A     Show me the price chart of my chosen stock':
             optA()
-            return render_template('fig.html')#,var='Price chart of the chosen stock', file= "./static/images/fig.png") 
+            return render_template('fig1.html')#,var='Price chart of the chosen stock', file= "./static/images/fig.png") 
+            
         if request.form.get('F') == 'F     Show me the price prediction for the future':
             return render_template('page5.html')
+            
         if request.form.get('C') == 'C     Show me the revenue and earnings of my chosen stock':
             if(optC()):
-                return render_template('fig.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
+                return render_template('fig3.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, Revenue and Earnings of stock:{stock} is not available')
+                
         if request.form.get('D') == 'D     Show me the cash flow statement of my chosen stock':
             if(optD()):
-                return render_template('fig.html')# var=f'Cashflow statement of stock: {stock}',file= "./static/images/fig2.png")
+                return render_template('fig4.html')# var=f'Cashflow statement of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, Cashflow statement of stock:{stock} is not available')
+                
         if request.form.get('E') == 'E     Show me the analyst recommendations for the stock of the last 6 months':
             if(optE()):
-                return render_template('fig.html')#var=f'Analyst recommendations of stock: {stock}',file= "./static/images/fig2.png")
+                return render_template('fig5.html')#var=f'Analyst recommendations of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, analyst recommendations of stock:{stock} is not available')                  
         if request.form.get('m1') == ' 1 Month':
             duration=30
             optF()
-            return render_template('fig.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m12') == ' 1 Year':
             duration=365
             optF()
-            return render_template('fig.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m6') == ' 6 Months':
             duration=180
             optF()
-            return render_template('fig.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
             
             
         
