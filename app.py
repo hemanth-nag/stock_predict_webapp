@@ -14,7 +14,7 @@ from plotly.offline import plot
 app = Flask(__name__)
 
 
-global stock, duration
+global stock, duration, compare
 
 @app.after_request
 def add_header(r):
@@ -36,13 +36,26 @@ def index():
 def set_stock():
         global stock
         form_data= request.form
-        global stock
         stock=form_data['Name']
         try:
             data.DataReader(stock, 'yahoo', '2019-01-01', '2019-01-02')
         except(KeyError, OSError):
             return render_template('page1.html', var= 'Not a valid stock symbol, try again:') 
         return render_template('page3.html', stock=stock)
+
+    
+        
+@app.route('/set_compare',methods=['POST','GET'])
+def set_compare():
+        global compare
+        form_data= request.form
+        compare=form_data['Name']
+        try:
+            data.DataReader(compare, 'yahoo', '2019-01-01', '2019-01-02')
+        except(KeyError, OSError):
+            return render_template('page6.html', var= 'Not a valid stock symbol, try again:')
+        optB()        
+        return render_template('fig2.html')       
 
 def optC():
     try:
@@ -88,6 +101,39 @@ def optC():
     # In this cases the user gets the following message:
     except(ValueError,AttributeError):
         return False
+
+def optB():
+    sdate = '2010-01-01'
+    edate = date.today().strftime('%Y-%m-%d')
+    df = data.DataReader(stock, 'yahoo', sdate, edate)
+    df = df.reset_index()
+    df_2 = data.DataReader(compare, 'yahoo', sdate, edate)
+    df_2 = df_2.reset_index()
+    fig = go.Figure()
+    # Add the data from the first stock
+    fig.add_trace(go.Scatter(
+                x=df.Date,
+                y=df['Adj Close'],
+                name=f'{stock} Stock',
+                line_color='deepskyblue',
+                opacity=0.9))
+    
+    # Add the data from the second stock
+    fig.add_trace(go.Scatter(
+                x=df_2.Date,
+                y=df_2['Adj Close'],
+                name=f'{compare} Stock',
+                line_color='dimgray',
+                opacity=0.9))
+
+
+    fig.update_layout(title=f'Price Comparison of {stock} Stock and {compare} Stock from {sdate} to {edate}', 
+                      yaxis_title='Adjusted Closing Price in USD',
+                     xaxis_tickfont_size=14,
+                     yaxis_tickfont_size=14)
+    
+    plotly.offline.plot(fig, filename='./templates/fig2.html')
+
 
 def optE():
     # Save the date of today in the variable "today"
@@ -383,9 +429,14 @@ def home_page():
     
         if request.form.get('stock_table') == 'Click to view top stocks and symbol':
             return render_template('page2.html')
+        if request.form.get('stock_table') == 'Click to view top stocks and symbols again':
+            return render_template('page7.html')    
             
         if request.form.get('back') == 'Back to main page':
             return render_template('page1.html', var= 'Please enter stock symbol:') 
+        
+        if request.form.get('back') == 'Back to previous page':
+            return render_template('page6.html', var= 'Please enter symbol of stock to compare:')     
             
         if request.form.get('A') == 'A     Show me the price chart of my chosen stock':
             optA()
@@ -410,7 +461,11 @@ def home_page():
             if(optE()):
                 return render_template('fig5.html')#var=f'Analyst recommendations of stock: {stock}',file= "./static/images/fig2.png")
             else:
-                return render_template('page4.html', var=f'Sorry, analyst recommendations of stock:{stock} is not available')                  
+                return render_template('page4.html', var=f'Sorry, analyst recommendations of stock:{stock} is not available')
+                
+        if request.form.get('B') == 'B     Show me a price comparison with an additional stock':
+            return render_template('page6.html', var='Please enter the symbol of the stock to compare')
+            
         if request.form.get('m1') == ' 1 Month':
             duration=30
             optF()
