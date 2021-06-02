@@ -396,7 +396,12 @@ def optF():
                                 yaxis_tickfont_size=14)
     
     #fig.write_image("./static/images/fig1.png")
-    plotly.offline.plot(fig, filename='./templates/fig6.html')
+    if(n==30):
+        plotly.offline.plot(fig, filename='./templates/fig6.html')
+    elif(n==180):
+        plotly.offline.plot(fig, filename='./templates/fig7.html')
+    elif(n==365):
+        plotly.offline.plot(fig, filename='./templates/fig8.html')
 
 
 def optA():
@@ -487,12 +492,12 @@ def home_page():
             session['duration']=365
             duration=session.get('duration')
             optF()
-            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            return render_template('fig8.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m6') == ' 6 Months':
             session['duration']=180
             duration=session.get('duration')
             optF()
-            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            return render_template('fig7.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
             
             
         
