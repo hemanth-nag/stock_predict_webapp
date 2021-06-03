@@ -109,6 +109,18 @@ section .wave.wave4
 	clear: both;
 	margin-top: -20px; 
 }
+#nav-list{
+	margin-top: 15px;
+	margin-right: -120px;
+}
+
+
+#nav-list a{
+	color: yellow;
+	font-size: 25px;
+	text-align: center;
+}
+
 .container2 {
 	width: 300px;
 	height: 1px;

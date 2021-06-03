@@ -53,7 +53,17 @@ body {
 	clear: both;
 	margin-top: -20px; 
 }
+#nav-list{
+	margin-top: 15px;
+	margin-right: -120px;
+}
 
+
+#nav-list a{
+	color: yellow;
+	font-size: 25px;
+	text-align: center;
+}
 .animation-area {
 	background: linear-gradient(to left, #8942a8, #ba382f);
 }
