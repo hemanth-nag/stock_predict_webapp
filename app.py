@@ -58,8 +58,8 @@ def set_compare():
             data.DataReader(session.get('compare'), 'yahoo', '2019-01-01', '2019-01-02')
         except(KeyError, OSError):
             return render_template('page6.html', var= 'Not a valid stock symbol, try again:')
-        optB()        
-        return render_template('fig2.html')       
+        fig=optB()        
+        return fig       
 
 def optC():
     stock=session.get('stock')
