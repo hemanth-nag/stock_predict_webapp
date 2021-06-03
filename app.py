@@ -17,7 +17,6 @@ SESSION_TYPE='filesystem'
 app.config.from_object(__name__)
 Session(app)
 
-global stock, duration, compare
 
 @app.after_request
 def add_header(r):
@@ -37,7 +36,6 @@ def index():
     
 @app.route('/set_stock',methods=['POST','GET'])
 def set_stock():
-        global stock
         form_data= request.form
         #stock=form_data['Name']
         session['stock']=form_data['Name']
@@ -51,7 +49,6 @@ def set_stock():
         
 @app.route('/set_compare',methods=['POST','GET'])
 def set_compare():
-        global compare
         form_data= request.form
         session['compare']=form_data['Name']
         try:
@@ -442,7 +439,6 @@ def optA():
 @app.route('/home_page',methods=['POST','GET'])
 def home_page():
     stock=session.get('stock')
-    global duration
     if request.method == 'POST':
     
         if request.form.get('stock_table') == 'Click to view top stocks and symbol':
