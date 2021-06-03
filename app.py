@@ -457,8 +457,8 @@ def home_page():
             return render_template('page6.html', var= 'Please enter symbol of stock to compare:')     
             
         if request.form.get('A') == 'A     Show me the price chart of my chosen stock':
-            optA()
-            return render_template('fig1.html')#,var='Price chart of the chosen stock', file= "./static/images/fig.png") 
+            fig=optA()
+            return fig #,var='Price chart of the chosen stock', file= "./static/images/fig.png") 
             
         if request.form.get('F') == 'F     Show me the price prediction for the future':
             return render_template('page5.html')
