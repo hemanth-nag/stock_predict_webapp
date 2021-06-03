@@ -435,6 +435,10 @@ def optA():
     #top='''<body> <form method="post" action="{{ url_for('home_page') }}"><input type="submit" value="Back to main menu" name="back" /> </form>	<p></p> </body>'''
     #fig+=top
     return fig
+
+@app.route('/about')
+def about():
+    return render_template('about1.html')
     
 @app.route('/home_page',methods=['POST','GET'])
 def home_page():
