@@ -11,8 +11,11 @@ from sklearn.ensemble import RandomForestRegressor
 from flask import Flask, render_template, Response, request, session
 from plotly.offline import plot
 from flask_session import Session
-
+from flask_ngrok import run_with_ngrok
+  
 app = Flask(__name__)
+run_with_ngrok(app)
+
 SESSION_TYPE='filesystem'
 app.config.from_object(__name__)
 Session(app)
