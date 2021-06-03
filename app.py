@@ -98,8 +98,9 @@ def optC():
         bargroupgap=0.1)
 
         #fig.write_image("./static/images/fig2.png")
-        plotly.offline.plot(fig, filename='./templates/fig3.html')
-        return True
+        fig=plotly.offline.plot(fig, output_type='div')
+        return fig
+        
         
         
     # For some stocks the imported data is distorted and in a wrong format, so that an error appears
@@ -139,7 +140,8 @@ def optB():
                      xaxis_tickfont_size=14,
                      yaxis_tickfont_size=14)
     
-    plotly.offline.plot(fig, filename='./templates/fig2.html')
+    fig=plotly.offline.plot(fig, output_type='div')
+    return fig
 
 
 def optE():
@@ -195,8 +197,8 @@ def optE():
             fig.update_layout(title_text=f'Analyst Recommendations of {stock} Stock from {six_months} to {today}')
 
             #fig.write_image("./static/images/fig2.png")
-            plotly.offline.plot(fig, filename='./templates/fig5.html')
-            return True  
+            fig=plotly.offline.plot(fig, output_type='div')
+            return fig 
         
 
 
@@ -279,8 +281,8 @@ def optD():
                                     tickfont_size = 12))
                           
         #fig.write_image("./static/images/fig2.png")
-        plotly.offline.plot(fig, filename='./templates/fig4.html')
-        return True
+        fig=plotly.offline.plot(fig, output_type='div')
+        return fig
         
         
     except(ValueError,AttributeError):
@@ -396,12 +398,8 @@ def optF():
                                 yaxis_tickfont_size=14)
     
     #fig.write_image("./static/images/fig1.png")
-    if(n==30):
-        plotly.offline.plot(fig, filename='./templates/fig6.html')
-    elif(n==180):
-        plotly.offline.plot(fig, filename='./templates/fig7.html')
-    elif(n==365):
-        plotly.offline.plot(fig, filename='./templates/fig8.html')
+    fig=plotly.offline.plot(fig, output_type='div')
+    return fig
 
 
 def optA():
@@ -436,7 +434,10 @@ def optA():
                      
     #fig.write_image("./static/images/fig.png")
     #plot(fig,filename='./static/images/fig.png' , image = 'png')
-    plotly.offline.plot(fig, filename='./templates/fig1.html')
+    fig=plotly.offline.plot(fig, output_type='div')
+    #top='''<body> <form method="post" action="{{ url_for('home_page') }}"><input type="submit" value="Back to main menu" name="back" /> </form>	<p></p> </body>'''
+    #fig+=top
+    return fig
     
 @app.route('/home_page',methods=['POST','GET'])
 def home_page():
@@ -463,20 +464,23 @@ def home_page():
             return render_template('page5.html')
             
         if request.form.get('C') == 'C     Show me the revenue and earnings of my chosen stock':
-            if(optC()):
-                return render_template('fig3.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
+            fig=optC()
+            if(fig!=False):
+                return fig #render_template('fig3.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, Revenue and Earnings of stock:{stock} is not available')
                 
         if request.form.get('D') == 'D     Show me the cash flow statement of my chosen stock':
-            if(optD()):
-                return render_template('fig4.html')# var=f'Cashflow statement of stock: {stock}',file= "./static/images/fig2.png")
+            fig=optD()
+            if(fig!=False):
+                return fig #render_template('fig3.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, Cashflow statement of stock:{stock} is not available')
                 
         if request.form.get('E') == 'E     Show me the analyst recommendations for the stock of the last 6 months':
-            if(optE()):
-                return render_template('fig5.html')#var=f'Analyst recommendations of stock: {stock}',file= "./static/images/fig2.png")
+            fig=optE()
+            if(fig!=False):
+                return fig #render_template('fig3.html')#, var=f'Revenue and Earnings of stock: {stock}',file= "./static/images/fig2.png")
             else:
                 return render_template('page4.html', var=f'Sorry, analyst recommendations of stock:{stock} is not available')
                 
@@ -485,19 +489,16 @@ def home_page():
             
         if request.form.get('m1') == ' 1 Month':
             session['duration']=30
-            duration=session.get('duration')
-            optF()
-            return render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            fig=optF()
+            return fig#render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m12') == ' 1 Year':
             session['duration']=365
-            duration=session.get('duration')
-            optF()
-            return render_template('fig8.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            fig=optF()
+            return fig#render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
         if request.form.get('m6') == ' 6 Months':
             session['duration']=180
-            duration=session.get('duration')
-            optF()
-            return render_template('fig7.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
+            fig=optF()
+            return fig#render_template('fig6.html')# var=f'Price predicted for a duration of {duration} days',file= "./static/images/fig1.png" )
             
             
         
