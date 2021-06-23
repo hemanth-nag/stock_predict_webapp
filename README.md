@@ -16,3 +16,5 @@ Note: Please wait a few seconds until the website loads up. Free dynos sleep due
 -- The webapp is deployed on a free heroku dyno.
 
 -- Interactive plots are generated using plotly.
+
+-- Sklearn RandomForestRegressor is used to predict future stock price performance. 
