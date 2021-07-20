@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from flask import Flask, render_template, Response, request, session
 from plotly.offline import plot
 from flask_session import Session
+from pandas_datareader._utils import RemoteDataError
 
 #Flask server side sessions
 app = Flask(__name__)
@@ -43,6 +44,8 @@ def set_stock():
         session['stock']=form_data['Name']
         try:
             data.DataReader(session.get('stock'), 'yahoo', '2019-01-01', '2019-01-02')
+        except RemoteDataError:
+            return 'Sorry, Yahoo API used to extract financial data is temporarily down. Please try again later...'       
         except(KeyError, OSError):
             return render_template('page1.html', var= 'Not a valid stock symbol, try again:') 
         return render_template('page3.html', stock=session.get('stock'))#stock)
